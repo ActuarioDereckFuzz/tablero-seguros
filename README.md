@@ -1,5 +1,8 @@
 # 📊 Tablero de Cartera — Diplomado ML Seguros
 
+| **Dereck Favila Limón** |
+|-|
+
 Aplicación **Streamlit** para análisis de cartera y cotización de primas en seguros de auto.  
 Carga datos desde **SQLite** (reconstruido desde Parquet si no existe) y permite visualizar KPIs, ratios de rentabilidad y cotizar primas de forma empirica y con modelos GLM.
 
