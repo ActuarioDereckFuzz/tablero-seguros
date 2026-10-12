@@ -146,8 +146,11 @@ def cotizar_empirico(d, p):
     # el .astype(str) es la corrección: edad_cat es Interval y hay que compararlo como texto
     seg = d[(d["edad_cat"].astype(str) == banda("edad_conductor", p["edad_conductor"])) &
             (d["cobertura"] == p["cobertura"]) & (d["sexo"] == p["sexo"]) &
-            (d["uso"] == p["uso"]) & (d["combustible"] == p["combustible"])
+            (d["uso"] == p["uso"]) & (d["combustible"] == p["combustible"]) &
             # TAREA alumnos: agregar aquí antiguedad, potencia y bonus (banda al vuelo)
+            (d["antiguedad_vehiculo_cat"].astype(str) == banda("antiguedad_vehiculo", p["antiguedad"])) &
+            (d["potencia_cat"].astype(str) == banda("potencia", p["potencia"])) &
+            (d["nivel_bonus_cat"].astype(str) == banda("nivel_bonus", p["bonus"]))
             ]
     n = len(seg)
     pp = seg["monto_total"].sum() / seg["exposicion"].sum() if seg["exposicion"].sum() > 0 else np.nan
