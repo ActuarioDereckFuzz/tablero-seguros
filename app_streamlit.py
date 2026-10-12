@@ -24,6 +24,12 @@ import streamlit as st
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import warnings; warnings.filterwarnings("ignore")
+import gspread
+
+@st.cache_resource
+def hoja():
+    gc = gspread.service_account_from_dict(st.secrets["gcp_service_account"])
+    return gc.open_by_url(st.secrets["sheet_url"]).sheet1
 
 st.set_page_config(page_title="Tablero de cartera — Diplomado ML Seguros",
                    page_icon="📊", layout="wide")
@@ -295,6 +301,12 @@ with tab_cotiza:
         pp_emp, n = cotizar_empirico(datos, p)
         freq, sev, pp_glm, pp_tw = cotizar_glm(p, m_freq, m_sev, m_agg)
         tarifa = pp_glm / (1 - gastos - margen)
+        hoja().append_row([pd.Timestamp.now().isoformat(),
+                    perfil["edad_conductor"], perfil["cobertura"], perfil["sexo"],
+                    perfil["uso"], perfil["combustible"], perfil["antiguedad"],
+                    perfil["potencia"], perfil["bonus"], round(pp_glm, 2), round(tarifa, 2)])
+        st.success("Cotización guardada ✔")
+
 
         # KPIs del cotizador EN ORDEN: 1 lo que dice la data → 2 el modelo → 3 el precio
         k1, k2, k3 = st.columns(3)
